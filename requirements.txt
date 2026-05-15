@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pydantic
+langchain-ollama
+langchain-chroma
+langchain-core
+langchain-text-splitters
+pymupdf
+python-dotenv
+requests
+langchain-groq
