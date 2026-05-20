@@ -325,7 +325,7 @@ def classify_query(question: str) -> str:
     return "retrieval"
 
 def build_prompt(question: str, context: str, history: str) -> str:
-    return f"""You are a helpful chatbot for the Technoveda knowledge base.
+    return f"""You are a helpful chatbot for the Akshaya Goshala knowledge base.
 Use the recent conversation to understand follow-up questions.
 Answer only from the provided context when giving factual information.
 Keep the answer short, direct, and natural.
@@ -460,7 +460,7 @@ def chat() -> None:
     cache = load_cache()
     chat_history: list[dict[str, str]] = []
 
-    print("Technoveda chatbot is ready. Type 'exit' to quit.")
+    print("Akshaya Goshala chatbot is ready. Type 'exit' to quit.")
 
     while True:
         question = input("\nYou: ").strip()

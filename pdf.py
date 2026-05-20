@@ -56,7 +56,7 @@ def build_vector_store() -> None:
     documents = load_pdf_documents(PDF_PATH)
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=800,
+        chunk_size=500,
         chunk_overlap=80,
     )
     chunks = text_splitter.split_documents(documents)
