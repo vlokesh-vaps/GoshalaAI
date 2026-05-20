@@ -3,3 +3,4 @@
 storage
 chroma_db
 __pycache__/
+chat_cache.json
