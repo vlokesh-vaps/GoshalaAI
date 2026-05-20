@@ -56,7 +56,7 @@ class ChatResponse(BaseModel):
     answer: str
 
 
-@app.get("/health")
+@app.get("/")
 def health() -> dict[str, str]:
     return {"status": "ok"}
 
