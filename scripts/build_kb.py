@@ -1,5 +1,6 @@
+"""Build the vector database from PDF."""
+
 import shutil
-from pathlib import Path
 
 import fitz
 from langchain_chroma import Chroma
@@ -7,24 +8,30 @@ from langchain_core.documents import Document
 from langchain_ollama import OllamaEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-
-PDF_PATH = Path("VAPS_Akshaya_Goshala_Chatbot_Knowledge_Base.pdf")
-PERSIST_DIRECTORY = Path("chroma_db")
-OLLAMA_MODEL = "embeddinggemma:300m"
-COLLECTION_NAME = "Akshaya_Goshala_Chatbot_Knowledge_kb"
+from src.config import COLLECTION_NAME, EMBEDDING_MODEL, PDF_CHUNK_OVERLAP, PDF_CHUNK_SIZE, PDF_PATH, PERSIST_DIRECTORY
 
 
-def load_pdf_documents(pdf_path: Path) -> list[Document]:
-    pdf_path.parent.mkdir(parents=True, exist_ok=True)
+def load_pdf_documents() -> list[Document]:
+    """
+    Extract text from PDF file.
 
-    if not pdf_path.exists():
-        pdf_path.touch()
+    Returns:
+        List of documents with page content and metadata
+
+    Raises:
+        FileNotFoundError: If PDF file doesn't exist
+        ValueError: If no text could be extracted from PDF
+    """
+    PERSIST_DIRECTORY.parent.mkdir(parents=True, exist_ok=True)
+
+    if not PDF_PATH.exists():
+        PDF_PATH.touch()
         raise FileNotFoundError(
-            f"PDF file not found. Created placeholder file at: {pdf_path}. "
+            f"PDF file not found. Created placeholder file at: {PDF_PATH}. "
             "Add your PDF content and run again."
         )
 
-    pdf = fitz.open(pdf_path)
+    pdf = fitz.open(PDF_PATH)
     documents: list[Document] = []
 
     try:
@@ -37,7 +44,7 @@ def load_pdf_documents(pdf_path: Path) -> list[Document]:
                 Document(
                     page_content=text,
                     metadata={
-                        "source": str(pdf_path),
+                        "source": str(PDF_PATH),
                         "page": page_index,
                     },
                 )
@@ -46,23 +53,28 @@ def load_pdf_documents(pdf_path: Path) -> list[Document]:
         pdf.close()
 
     if not documents:
-        raise ValueError(f"No text could be extracted from {pdf_path}")
+        raise ValueError(f"No text could be extracted from {PDF_PATH}")
 
     return documents
 
 
 def build_vector_store() -> None:
+    """
+    Build and persist the vector database from PDF.
+
+    Loads PDF, splits into chunks, embeds with Ollama, and stores in Chroma.
+    """
     PERSIST_DIRECTORY.parent.mkdir(parents=True, exist_ok=True)
-    documents = load_pdf_documents(PDF_PATH)
+    documents = load_pdf_documents()
 
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=500,
-        chunk_overlap=80,
+        chunk_size=PDF_CHUNK_SIZE,
+        chunk_overlap=PDF_CHUNK_OVERLAP,
     )
     chunks = text_splitter.split_documents(documents)
     print(f"Loaded {len(documents)} pages and created {len(chunks)} chunks.")
 
-    embedding_model = OllamaEmbeddings(model=OLLAMA_MODEL)
+    embedding_model = OllamaEmbeddings(model=EMBEDDING_MODEL)
 
     if PERSIST_DIRECTORY.exists():
         shutil.rmtree(PERSIST_DIRECTORY)
@@ -80,3 +92,4 @@ def build_vector_store() -> None:
 
 if __name__ == "__main__":
     build_vector_store()
+
