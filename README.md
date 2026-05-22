@@ -1,4 +1,4 @@
-# GoshalaAI - Refactored Structure
+# GoshalaAI - Structure
 
 This document describes the refactored project structure of GoshalaAI, a RAG-based chatbot for the Akshaya Goshala knowledge base.
 
@@ -331,15 +331,3 @@ ollama serve
 # Verify GROQ_API_KEY is set
 python -c "import os; print(os.getenv('GROQ_API_KEY'))"
 ```
-
-## Migration from Old Structure
-
-The refactored structure maintains backward compatibility:
-- `app.py` → Routes to `src/api/app.py`
-- `main.py` → Routes to `src/core/rag.py:chat()`
-- `pdf.py` → Use `scripts/build_kb.py` instead
-- `rag_logging.py` → Use `src/utils/logging.py`
-- `Datastore.py` → Use `src/storage/datastore.py`
-
-All original functionality is preserved, just organized into logical modules.
-

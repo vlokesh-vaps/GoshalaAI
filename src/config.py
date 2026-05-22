@@ -7,10 +7,11 @@ from pathlib import Path
 # Directory and File Paths
 # ============================================================================
 
-PERSIST_DIRECTORY = Path("data/chroma_db")
-CACHE_FILE = Path("data/cache/chat_cache.json")
-BM25_CACHE_FILE = Path("data/cache/bm25_index.pkl")
-LOG_DIR = Path("data/logs")
+BASE_DIR = Path(__file__).resolve().parent.parent
+PERSIST_DIRECTORY = BASE_DIR / "data/chroma_db"
+CACHE_FILE = BASE_DIR / "data/cache/chat_cache.json"
+BM25_CACHE_FILE = BASE_DIR / "data/cache/bm25_index.pkl"
+LOG_DIR = BASE_DIR / "data/logs"
 LOG_FILE = LOG_DIR / "chat.log"
 
 # ============================================================================
@@ -89,13 +90,13 @@ DATASTORE_URL = "https://vmsstaging.vapssmartecampus.com:40015/api/ISMDashboardF
 DATASTORE_TIMEOUT = 10
 DATASTORE_WEBSITE_NAME = "Akshaya_Goshala"
 DATASTORE_WEBSITE_URL = "https://vapsfoundation.org/about.html"
-DATASTORE_USER_AGENT = "Technoveda-Chatbot/1.0"
+DATASTORE_USER_AGENT = "Akshaya_Goshala-Chatbot/1.0"
 
 # ============================================================================
 # PDF Configuration
 # ============================================================================
 
-PDF_PATH = Path("VAPS_Akshaya_Goshala_Chatbot_Knowledge_Base.pdf")
+PDF_PATH = BASE_DIR / "KB_PDF/VAPS_Akshaya_Goshala_Chatbot_Knowledge_Base.pdf"
 PDF_CHUNK_SIZE = 500
 PDF_CHUNK_OVERLAP = 80
 

@@ -19,13 +19,12 @@ def load_pdf_documents() -> list[Document]:
         List of documents with page content and metadata
 
     Raises:
-        FileNotFoundError: If PDF file doesn't exist
+        FileNotFoundError: If PDF file doesn't existgut
         ValueError: If no text could be extracted from PDF
     """
     PERSIST_DIRECTORY.parent.mkdir(parents=True, exist_ok=True)
 
     if not PDF_PATH.exists():
-        PDF_PATH.touch()
         raise FileNotFoundError(
             f"PDF file not found. Created placeholder file at: {PDF_PATH}. "
             "Add your PDF content and run again."
