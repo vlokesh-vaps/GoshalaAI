@@ -1,8 +1,10 @@
+
 FROM python:3.11-slim AS runtime
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONPATH=/app
 
 WORKDIR /app
 
@@ -19,9 +21,9 @@ RUN mkdir -p /app/data/chroma_db /app/data/cache /app/data/logs \
 
 USER app
 
-EXPOSE 8001
+EXPOSE 5004
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/', timeout=3).read()"
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5004/', timeout=3).read()"
 
-CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "8001", "--workers", "1"]
+CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "5004", "--workers", "1"]

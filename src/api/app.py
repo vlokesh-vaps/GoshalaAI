@@ -50,7 +50,7 @@ session_histories: dict[str, list[dict[str, str]]] = defaultdict(list)
 @app.get("/")
 def health() -> dict[str, str]:
     """Health check endpoint."""
-    return {"status": "ok"}
+    return {"status": "Goshala AI Chatobot is running"}
 
 
 @app.post("/webhook/chat", response_model=ChatResponse)
@@ -109,5 +109,5 @@ def run(host: str = API_HOST, port: int = API_PORT, reload: bool = True) -> None
         reload: Enable auto-reload
     """
     import uvicorn
-    uvicorn.run(app, host=host, port=port, reload=reload)
+    uvicorn.run("src.api.app:app", host="0.0.0.0", port=5004, reload=reload)
 

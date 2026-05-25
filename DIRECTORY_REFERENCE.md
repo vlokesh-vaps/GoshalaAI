@@ -211,7 +211,7 @@ scripts/cli_chat.py
 python scripts/build_kb.py
 
 # API Server
-python -m uvicorn src.api.app:app --host 0.0.0.0 --port 8001 --reload
+python -m uvicorn src.api.app:app --host 0.0.0.0 --port 5004 --reload
 
 # CLI Chat
 python scripts/cli_chat.py

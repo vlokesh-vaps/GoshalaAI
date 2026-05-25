@@ -137,7 +137,7 @@ GoshalaAI/
 ```bash
 python app.py
 # or
-uvicorn src.api.app:app --host 0.0.0.0 --port 8001 --reload
+uvicorn src.api.app:app --host 0.0.0.0 --port 5004 --reload
 ```
 
 **`main.py`** - CLI Chat
@@ -149,7 +149,7 @@ python main.py
 
 **API Server:**
 ```bash
-python -m uvicorn src.api.app:app --host 0.0.0.0 --port 8001 --reload
+python -m uvicorn src.api.app:app --host 0.0.0.0 --port 5004 --reload
 ```
 
 **CLI Chat:**
@@ -244,7 +244,7 @@ python scripts/build_kb.py
 **API Server:**
 ```bash
 python app.py
-# Runs on http://localhost:8001
+# Runs on http://localhost:5004
 ```
 
 **CLI Chat:**
@@ -261,7 +261,7 @@ docker compose up --build
 
 Compose starts Ollama, pulls `embeddinggemma:300m`, runs the one-shot
 `goshala-kb` builder to create `data/chroma_db`, and then starts the API on
-`http://localhost:5001`.
+`http://localhost:5004`.
 
 To rebuild the vector database after changing the PDF, remove the completed
 builder container and start again:
@@ -327,7 +327,7 @@ ollama serve
 
 ### API won't start
 ```bash
-# Check port 8001 is available
+# Check port 5004 is available
 # Verify GROQ_API_KEY is set
 python -c "import os; print(os.getenv('GROQ_API_KEY'))"
 ```
