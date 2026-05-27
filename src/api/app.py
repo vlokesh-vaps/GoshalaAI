@@ -88,7 +88,7 @@ def webhook_chat(payload: ChatRequest, background_tasks: BackgroundTasks) -> Cha
             session_histories[session_id] = chat_history[-MAX_HISTORY_MESSAGES:]
 
         log_step("BOT_MESSAGE", text=answer, session_id=session_id)
-        background_tasks.add_task(save_conversation, session_id, message, answer)
+        #background_tasks.add_task(save_conversation, session_id, message, answer)
         total_latency_ms = int((time.perf_counter() - total_start) * 1000)
         log_step("TOTAL", latency=f"{total_latency_ms}ms", session_id=session_id)
         return ChatResponse(session_id=session_id, answer=answer)

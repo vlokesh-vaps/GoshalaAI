@@ -21,6 +21,18 @@ from src.utils.logging import log_error, log_step
 
 _semantic_embedder: OllamaEmbeddings | None = None
 
+UNCACHEABLE_ANSWER_MARKERS = (
+    "sorry,i missed something",
+    "not mentioned in the provided context",
+    "could not find anything relevant",
+)
+
+
+def _is_uncacheable_answer(answer: str) -> bool:
+    """Return True for fallback answers that should not poison cache hits."""
+    normalized_answer = answer.lower().strip()
+    return any(marker in normalized_answer for marker in UNCACHEABLE_ANSWER_MARKERS)
+
 
 def get_semantic_embedder() -> OllamaEmbeddings:
     """Get or create the semantic embedder singleton."""
@@ -136,7 +148,10 @@ def get_cached_answer(
     if isinstance(cached_entry, dict):
         answer = cached_entry.get("answer")
         if isinstance(answer, str):
-            return answer
+            if _is_uncacheable_answer(answer):
+                log_step("CACHE_SKIP_UNCACHEABLE", source="exact")
+            else:
+                return answer
 
     # Try semantic match
     normalized_question = normalize_question(question)
@@ -155,6 +170,8 @@ def get_cached_answer(
         answer = entry.get("answer")
         embedding = entry.get("question_embedding")
         if not isinstance(answer, str) or not isinstance(embedding, list):
+            continue
+        if _is_uncacheable_answer(answer):
             continue
         if not all(isinstance(value, (int, float)) for value in embedding):
             continue
@@ -184,6 +201,10 @@ def update_cache(
         answer: AI response
         route: Query route classification
     """
+    if _is_uncacheable_answer(answer):
+        log_step("CACHE_WRITE_SKIPPED", reason="uncacheable_answer")
+        return
+
     normalized_question = normalize_question(question)
     question_embedding: list[float] | None = None
     try:
