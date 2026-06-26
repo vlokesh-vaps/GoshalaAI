@@ -1,7 +1,5 @@
 """Prompt building utilities for the chatbot."""
-
 from src.config import GREETING_PATTERN, DIRECT_CONTENT_HINTS, MAX_HISTORY_MESSAGES, normalize_question
-
 
 def format_history(chat_history: list[dict[str, str]]) -> str:
     """
@@ -21,7 +19,6 @@ def format_history(chat_history: list[dict[str, str]]) -> str:
         role = message["role"].capitalize()
         lines.append(f"{role}: {message['content']}")
     return "\n".join(lines)
-
 
 def classify_query(question: str) -> str:
     """
@@ -45,7 +42,6 @@ def classify_query(question: str) -> str:
         return "direct_context"
     return "retrieval"
 
-
 def build_prompt(question: str, context: str, history: str) -> str:
     """
     Build the main Q&A prompt for the LLM.
@@ -71,7 +67,6 @@ Question:
 {question}
 Answer:"""
 
-
 def build_direct_context_prompt(question: str, history: str) -> str:
     """
     Build a specialized prompt for direct context or structured output requests.
@@ -92,53 +87,3 @@ Conversation:
 User request:
 {question}
 Answer:"""
-
-
-def build_prompt(question: str, context: str, history: str) -> str:
-    """
-    Build the main Q&A prompt for the LLM.
-
-    Args:
-        question: User question
-        context: Retrieved context from knowledge base
-        history: Formatted chat history
-
-    Returns:
-        Complete prompt for the LLM
-    """
-    return f"""You are a helpful chatbot for the Akshaya Goshala knowledge base.
-Use the recent conversation to understand follow-up questions.
-Answer only from the provided context when giving factual information.
-Keep the answer short, direct, and natural.
-If the answer is not in the context, say: Sorry,I missed something.
-Conversation:
-{history}
-Context:
-{context}
-Question:
-{question}
-Answer:"""
-
-
-def build_direct_context_prompt(question: str, history: str) -> str:
-    """
-    Build a specialized prompt for direct context or structured output requests.
-
-    Args:
-        question: User question
-        history: Formatted chat history
-
-    Returns:
-        Complete prompt for the LLM
-    """
-    return f"""You are a careful assistant.
-The user may provide full source content directly inside the request.
-When that happens, answer from the user-provided content instead of external knowledge.
-If the user asks for JSON, return valid JSON only.
-Conversation:
-{history}
-User request:
-{question}
-Answer:"""
-
-

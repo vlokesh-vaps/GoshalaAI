@@ -1,5 +1,4 @@
 """Build the vector database from PDF."""
-
 import shutil
 
 import fitz
