@@ -20,7 +20,7 @@ LOG_FILE = LOG_DIR / "chat.log"
 
 EMBEDDING_MODEL = "embeddinggemma:300m"
 COLLECTION_NAME = "Akshaya_Goshala_Chatbot_Knowledge_kb"
-CHAT_MODEL = "llama-3.1-8b-instant"
+CHAT_MODEL = "openai/gpt-oss-20b"
 
 # ============================================================================
 # Retrieval Parameters
